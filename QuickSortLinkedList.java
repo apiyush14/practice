@@ -104,14 +104,37 @@ private static LinkedList quickSortRec(LinkedList list, Node start, Node end) {
 		Node node=start;
 		Node pivot=end;
 		Node last=end;
-		while(node.next!=end)
+		Node prev=start;
+		while(node.getNext()!=pivot)
 		{
 			if(node.getData()>pivot.getData())
 			{
-				node.setNext(null);
-				last.setNext(node);
+				if(node==list.getHead())
+				{
+					list.setHead(node.getNext());
+					start=node.getNext();
+				}
+				
+				prev.setNext(node.getNext());
+				Node tempNode=new Node();
+				tempNode.setData(node.getData());
+				last.setNext(tempNode);
+				last=tempNode;
+				node=prev.getNext();
+				prev=node;
+				if(pivot==list.getLast())
+				{
+					list.setLast(tempNode);
+				}
+			}
+			else
+			{
+			prev=node;
+			node=node.getNext();
 			}
 		}
+		list=quickSortRec(list, start, node);
+		list=quickSortRec(list, pivot.getNext(), last);
 	}
 	return list;
 }
